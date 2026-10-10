@@ -4,22 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#ffd32a">
-    <title>訓練校　懇親会　配席決めアプリ</title>
+    <title>懇親会　席くじアプリ</title>
     <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}">
 </head>
 <body>
     <header class="site-header">
-        <a class="brand" href="#top">CHEERS!<span>訓練校　懇親会　配席決めアプリ</span></a>
+        <a class="brand" href="#top">CHEERS!<span>懇親会　席くじアプリ</span></a>
         <a class="map-link" href="#seating">配席図を見る <span aria-hidden="true">↗</span></a>
     </header>
     <main class="container" id="top">
         <section class="hero" aria-labelledby="hero-title">
             <div class="hero-copy">
                 <p class="eyebrow">LET’S GET TOGETHER</p>
-                <h1 id="hero-title">訓練校　懇親会　配席決めアプリ</h1>
+                <h1 id="hero-title">懇親会　席くじアプリ</h1>
                 <p class="hero-instruction">くじを引いてください</p>
-                <p class="hero-description">席が決まれば、乾杯の準備はばっちり。<br>いつもと違うとなりで、楽しいひとときを！</p>
-                <div class="event-tags"><span>10人で乾杯</span><span>4人掛け × 3テーブル</span></div>
+                <p class="hero-description">席が決まれば、乾杯の準備はばっちり。<br>みんでワイワイ、楽しいひとときを！</p>
+                <div class="event-tags"><span>10人で乾杯</span><span>17時START</span></div>
             </div>
             <div class="hero-art" aria-hidden="true">
                 <span class="cheers-word">Cheers!</span>
@@ -68,7 +68,7 @@
         <p class="notice success" th:if="${message != null}" th:text="${message}" role="status"></p>
         <section class="seating-section" id="seating" aria-labelledby="seating-title">
             <div class="section-heading"><div><span class="step-label">02 / SEATING MAP</span><h2 id="seating-title">みんなの配席図</h2></div><p class="draw-count"><strong th:text="${#maps.size(seatMap)}">0</strong> / 10 人 <span>抽選済み</span></p></div>
-            <p class="seating-summary">4人掛け × 3テーブルの場合の配席（※違ったら現地で調整します）</p>
+            <p class="seating-summary">4人掛け × 3テーブル</p>
             <div class="map-description"><p>名前が出たら、そこがあなたの席。</p><div class="legend"><span><i class="assigned-dot"></i>抽選済み</span><span><i></i>未抽選</span><span><i class="empty-dot"></i>空席</span></div></div>
             <div class="tables">
                 <article class="table-block"><div class="table-heading"><h3><b>A</b> テーブル</h3><span>4人</span></div>
