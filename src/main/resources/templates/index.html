@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffd32a">
+    <title>訓練校　懇親会　配席決めアプリ</title>
+    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="#top">CHEERS!<span>訓練校　懇親会　配席決めアプリ</span></a>
+        <a class="map-link" href="#seating">配席図を見る <span aria-hidden="true">↗</span></a>
+    </header>
+    <main class="container" id="top">
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="eyebrow">LET’S GET TOGETHER</p>
+                <h1 id="hero-title">訓練校　懇親会　配席決めアプリ</h1>
+                <p class="hero-instruction">くじを引いてください</p>
+                <p class="hero-description">席が決まれば、乾杯の準備はばっちり。<br>いつもと違うとなりで、楽しいひとときを！</p>
+                <div class="event-tags"><span>10人で乾杯</span><span>4人掛け × 3テーブル</span></div>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+                <span class="cheers-word">Cheers!</span>
+                <svg viewBox="0 0 420 270" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g stroke="#202020" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M193 39l-10-19m37 18 5-25m20 33 17-17M56 89l-24-9m27-8L44 54m310 30 28-12m-35-6 15-23"/>
+                        <g transform="rotate(14 140 160)">
+                            <path d="M94 121H66c-28 0-28 66 0 66h28v-18H69c-9 0-9-29 0-29h25" fill="white"/>
+                            <path d="M92 96h97v137q-48 15-97 0Z" fill="white"/>
+                            <path d="M102 127h77v96q-38 10-77 0Z" fill="#ffd32a" stroke="none"/>
+                            <path d="M88 106c-15-11-8-33 8-34-2-23 31-29 41-13 20-17 40-2 41 12 28-2 31 29 11 38-11 8-22-3-27-2-11 28-29 18-29-1-17 10-25-8-33 0Z" fill="white"/>
+                            <path d="M113 144v44" stroke="white" stroke-width="7"/>
+                            <circle cx="157" cy="155" r="5" fill="white" stroke="none"/><circle cx="143" cy="199" r="6" fill="white" stroke="none"/>
+                        </g>
+                        <g transform="rotate(-14 281 160)">
+                            <path d="M326 121h28c28 0 28 66 0 66h-28v-18h25c9 0 9-29 0-29h-25" fill="white"/>
+                            <path d="M229 96h97v137q-48 15-97 0Z" fill="white"/>
+                            <path d="M239 127h77v96q-38 10-77 0Z" fill="#ffd32a" stroke="none"/>
+                            <path d="M229 108c-23-5-22-34-2-39 1-21 31-28 44-12 19-17 40-2 41 13 24-1 29 27 14 37-15 12-26-8-37 0-11 21-26 17-27-4-14 10-21-2-33 5Z" fill="white"/>
+                            <path d="M251 144v44" stroke="white" stroke-width="7"/>
+                            <circle cx="294" cy="162" r="6" fill="white" stroke="none"/><circle cx="279" cy="205" r="5" fill="white" stroke="none"/>
+                        </g>
+                        <path d="m48 211 5-13 6 13 14 4-14 5-6 13-5-13-14-5Zm319 8 4-10 4 10 11 4-11 4-4 10-4-10-10-4Z" fill="#ffd32a" stroke-width="3"/>
+                    </g>
+                </svg>
+                <span class="art-caption">いい席、いい出会い、いい乾杯。</span>
+            </div>
+        </section>
+        <section class="draw-panel" aria-labelledby="draw-title">
+            <div class="draw-intro"><span class="step-label">01 / DRAW</span><h2 id="draw-title">さあ、席を引こう！</h2><p>自分の名前を選んで、ボタンをポン。</p></div>
+            <form th:action="@{/draw}" method="post" class="lottery-form">
+                <div class="field"><label for="participant-name">あなたの名前</label><select id="participant-name" name="name" required>
+                    <option value="">名前を選んでください</option>
+                    <option th:each="participant : ${participants}" th:value="${participant.name}" th:text="${participant.name + (participant.drawn ? '（抽選済み）' : '')}" th:disabled="${participant.drawn}"></option>
+                </select></div>
+                <button type="submit" class="draw-button">席くじを引く <span aria-hidden="true">↗</span></button>
+                <p class="form-note">抽選は1人1回。どの席になるかは、お楽しみ！</p>
+            </form>
+        </section>
+        <div class="result" th:if="${seat != null}" role="status">
+            <span class="step-label">YOUR SEAT!</span><p th:text="${selectedName + 'さんの席が決まりました！'}"></p>
+            <h2><span th:text="${seat != null ? (seat <= 4 ? 'A' : (seat <= 8 ? 'B' : 'C')) : ''}"></span>テーブル <strong th:text="${seat}"></strong>番席</h2>
+            <p>下の配席図で場所をチェック。さあ、乾杯しよう！</p>
+        </div>
+        <p class="notice error" th:if="${errorMessage != null}" th:text="${errorMessage}" role="alert"></p>
+        <p class="notice success" th:if="${message != null}" th:text="${message}" role="status"></p>
+        <section class="seating-section" id="seating" aria-labelledby="seating-title">
+            <div class="section-heading"><div><span class="step-label">02 / SEATING MAP</span><h2 id="seating-title">みんなの配席図</h2></div><p class="draw-count"><strong th:text="${#maps.size(seatMap)}">0</strong> / 10 人 <span>抽選済み</span></p></div>
+            <p class="seating-summary">4人掛け × 3テーブルの場合の配席（※違ったら現地で調整します）</p>
+            <div class="map-description"><p>名前が出たら、そこがあなたの席。</p><div class="legend"><span><i class="assigned-dot"></i>抽選済み</span><span><i></i>未抽選</span><span><i class="empty-dot"></i>空席</span></div></div>
+            <div class="tables">
+                <article class="table-block"><div class="table-heading"><h3><b>A</b> テーブル</h3><span>4人</span></div>
+                    <div class="table-layout">
+                        <div class="seat seat-top-left" th:classappend="${seatMap.containsKey(1) ? 'is-assigned' : ''}">
+                            <span class="seat-number">1<small>番席</small></span>
+                            <span class="seat-name" th:text="${seatMap.containsKey(1) ? seatMap.get(1) : '未抽選'}">未抽選</span>
+                        </div>
+                        <div class="seat seat-top-right" th:classappend="${seatMap.containsKey(2) ? 'is-assigned' : ''}">
+                            <span class="seat-number">2<small>番席</small></span>
+                            <span class="seat-name" th:text="${seatMap.containsKey(2) ? seatMap.get(2) : '未抽選'}">未抽選</span>
+                        </div>
+                        <div class="seat seat-bottom-left" th:classappend="${seatMap.containsKey(3) ? 'is-assigned' : ''}">
+                            <span class="seat-number">3<small>番席</small></span>
+                            <span class="seat-name" th:text="${seatMap.containsKey(3) ? seatMap.get(3) : '未抽選'}">未抽選</span>
+                        </div>
+                        <div class="seat seat-bottom-right" th:classappend="${seatMap.containsKey(4) ? 'is-assigned' : ''}">
+                            <span class="seat-number">4<small>番席</small></span>
+                            <span class="seat-name" th:text="${seatMap.containsKey(4) ? seatMap.get(4) : '未抽選'}">未抽選</span>
+                        </div>
+                        <div class="table"><small>TABLE</small><span>A</span><small>CHEERS!</small></div>
+                    </div>
+                </article>
+                <article class="table-block"><div class="table-heading"><h3><b>B</b> テーブル</h3><span>4人</span></div>
+                    <div class="table-layout">
+                        <div class="seat seat-top-left" th:classappend="${seatMap.containsKey(5) ? 'is-assigned' : ''}">
+                            <span class="seat-number">5<small>番席</small></span>
+                            <span class="seat-name" th:text="${seatMap.containsKey(5) ? seatMap.get(5) : '未抽選'}">未抽選</span>
+                        </div>
+                        <div class="seat seat-top-right" th:classappend="${seatMap.containsKey(6) ? 'is-assigned' : ''}">
+                            <span class="seat-number">6<small>番席</small></span>
+                            <span class="seat-name" th:text="${seatMap.containsKey(6) ? seatMap.get(6) : '未抽選'}">未抽選</span>
+                        </div>
+                        <div class="seat seat-bottom-left" th:classappend="${seatMap.containsKey(7) ? 'is-assigned' : ''}">
+                            <span class="seat-number">7<small>番席</small></span>
+                            <span class="seat-name" th:text="${seatMap.containsKey(7) ? seatMap.get(7) : '未抽選'}">未抽選</span>
+                        </div>
+                        <div class="seat seat-bottom-right" th:classappend="${seatMap.containsKey(8) ? 'is-assigned' : ''}">
+                            <span class="seat-number">8<small>番席</small></span>
+                            <span class="seat-name" th:text="${seatMap.containsKey(8) ? seatMap.get(8) : '未抽選'}">未抽選</span>
+                        </div>
+                        <div class="table"><small>TABLE</small><span>B</span><small>CHEERS!</small></div>
+                    </div>
+                </article>
+                <article class="table-block"><div class="table-heading"><h3><b>C</b> テーブル</h3><span>2人 + 空席2席</span></div>
+                    <div class="table-layout">
+                        <div class="seat seat-top-left" th:classappend="${seatMap.containsKey(9) ? 'is-assigned' : ''}">
+                            <span class="seat-number">9<small>番席</small></span>
+                            <span class="seat-name" th:text="${seatMap.containsKey(9) ? seatMap.get(9) : '未抽選'}">未抽選</span>
+                        </div>
+                        <div class="seat seat-top-right" th:classappend="${seatMap.containsKey(10) ? 'is-assigned' : ''}">
+                            <span class="seat-number">10<small>番席</small></span>
+                            <span class="seat-name" th:text="${seatMap.containsKey(10) ? seatMap.get(10) : '未抽選'}">未抽選</span>
+                        </div>
+                        <div class="seat unused-seat seat-bottom-left"><span aria-hidden="true">—</span><span>空席</span></div>
+                        <div class="seat unused-seat seat-bottom-right"><span aria-hidden="true">—</span><span>空席</span></div>
+                        <div class="table"><small>TABLE</small><span>C</span><small>CHEERS!</small></div>
+                    </div>
+                </article>
+            </div>
+            <p class="seating-note">※ Cテーブルの2席は空席です。抽選対象は1〜10番席です。</p>
+        </section>
+        <details class="admin-section">
+            <summary><span>幹事さんメニュー<small>抽選のリセットはこちら</small></span><span class="details-icon" aria-hidden="true">＋</span></summary>
+            <div class="admin-content"><p>やり直しが必要なときは、管理者パスワードを入力してください。</p><div class="admin-forms">
+                <form th:action="@{/reset-participant}" method="post"><h3>1人分をリセット</h3>
+                    <label for="reset-name">参加者</label><select id="reset-name" name="name" required><option value="">参加者を選んでください</option><option th:each="participant : ${participants}" th:value="${participant.name}" th:text="${participant.name}"></option></select>
+                    <label for="participant-password">管理者パスワード</label><input id="participant-password" type="password" name="password" required autocomplete="current-password"><button type="submit" class="secondary-button">この人の抽選をリセット</button>
+                </form>
+                <form th:action="@{/reset-all}" method="post"><h3>全員分をリセット</h3><p>全員の席を未抽選に戻します。</p>
+                    <label for="all-password">管理者パスワード</label><input id="all-password" type="password" name="password" required autocomplete="current-password"><button type="submit" class="secondary-button">全員の抽選をリセット</button>
+                </form>
+            </div></div>
+        </details>
+        <footer class="site-footer"><span>CHEERS!</span><p>今日も、いい乾杯を。</p></footer>
+    </main>
+</body>
+</html>
