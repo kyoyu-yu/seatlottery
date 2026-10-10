@@ -1,3 +1,7 @@
+<img width="1737" height="826" alt="image" src="https://github.com/user-attachments/assets/505cd01c-fe48-45ab-8efd-604fd2a09b63" />
+
+
+
 # 席くじアプリ
 
 職業訓練校での席決めを想定して制作した、Spring Boot製のWebアプリケーションです。
